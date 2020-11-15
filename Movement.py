@@ -2,9 +2,20 @@ import cv2
 import numpy
 
 camera = cv2.VideoCapture('/dev/video0')
-backSub = cv2.createBackgroundSubtractorMOG2(10, 50, 0)
+backSub = cv2.createBackgroundSubtractorMOG2(20, 50, 0)
+
 params = cv2.SimpleBlobDetector_Params()
-params.minArea = 500
+params.filterByArea = True
+params.filterByInertia = False
+params.filterByCircularity = False
+params.filterByConvexity = False
+
+wid = camera.get(3)     # 3 = width
+hig = camera.get(4)
+#params.minArea = int(wid / 5) ^ 2
+#params.maxArea = int(wid / 2) ^ 2
+params.minArea = 200
+params.maxArea = 500
 
 detector = cv2.SimpleBlobDetector_create(params)
 
@@ -17,6 +28,7 @@ class MovementClass:
     @staticmethod
     def getMovement():
         ret, frame = camera.read()
+        frame = cv2.flip(frame, 1)
         mono = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
         difference = backSub.apply(mono)
         difference = cv2.bitwise_not(difference)
@@ -26,6 +38,8 @@ class MovementClass:
         view_blobs = cv2.drawKeypoints(difference, keypoints, empty, (0, 0, 255),
                                        cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         cv2.imshow('bgDiff', view_blobs)
+        return keypoints
+
 
     @staticmethod
     def closed():
