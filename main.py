@@ -1,7 +1,6 @@
 from Movement import MovementClass
 
 movement = MovementClass()
-movement.__init__()
 
 while 1:
     movement.getMovement()
