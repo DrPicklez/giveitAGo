@@ -5,7 +5,6 @@ audio = Audio()
 movement = MovementClass()
 
 while 1:
-    #audio.updateSoundStream()
     points = movement.getMovement()
     for point in points:
         print("x:")
