@@ -1,9 +1,11 @@
 from Movement import MovementClass
+from Audio import Audio
 
+audio = Audio()
 movement = MovementClass()
 
-
 while 1:
+    audio.updateSoundStream()
     points = movement.getMovement()
     for point in points:
         print("x:")
@@ -13,3 +15,4 @@ while 1:
 
     if movement.getIsClosed() == 0:
         break
+

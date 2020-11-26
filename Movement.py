@@ -1,17 +1,13 @@
 import cv2
 import numpy
+import threading
 
-#wid = camera.get(3)     # 3 = width
-#hig = camera.get(4)
-
-
-# wid = camera.get(3)  # 3 = width
-# hig = camera.get(4)
 # self.params.minArea = int(wid / 5) ^ 2
 # self.params.maxArea = int(wid / 2) ^ 2
 
 # params.minArea = int(wid / 5) ^ 2
 # params.maxArea = int(wid / 2) ^ 2
+
 
 class MovementClass:
 
@@ -20,7 +16,12 @@ class MovementClass:
         self.backSub = cv2.createBackgroundSubtractorMOG2(20, 50, 0)
         params = self.setParams(cv2.SimpleBlobDetector_Params())
         self.detector = cv2.SimpleBlobDetector_create(params)
+        self.imageThread = threading.Thread(name='image', target=self.getMovement)
         pass
+
+    def start(self):
+        self.imageThread.start()
+        return self
 
     def setParams(self, param):
         param.filterByArea = True
@@ -44,6 +45,12 @@ class MovementClass:
                                        cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         cv2.imshow('bgDiff', view_blobs)
         return keypoints
+
+    def getWidth(self):
+        return self.camera.get(3)
+
+    def getHeight(self):
+        return self.camera.get(4)
 
     def getIsClosed(self):
         if cv2.waitKey(1) & 0xFF == 27:
