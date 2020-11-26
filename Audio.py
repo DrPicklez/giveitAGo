@@ -22,14 +22,20 @@ class Audio:
         self.stream = p.open(format=pyaudio.paFloat32,
                              channels=1,
                              rate=self.fs,
+                             frames_per_buffer = int(self.fs * self.bufferSize),
+                             stream_callback = self.callback,
                              output=True)
 
         self.sineWave = Sine(self.bufferSize, self.fs)
         pass
 
+    def callback(self, in_data, frame_count, time_info, status):
+        buffer = self.updateSoundStream()
+        return (buffer, pyaudio.paContinue)
+
     def updateSoundStream(self):
         buffer = self.volume * self.sineWave.getBuffer(500)
-        self.stream.write(buffer)
+        return buffer
 
         # generate samples, note conversion to float32 array
 
