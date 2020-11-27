@@ -1,3 +1,5 @@
+# getMouse  https://docs.opencv.org/master/db/d5b/tutorial_py_mouse_handling.html
+
 import cv2
 import numpy
 import threading
@@ -16,6 +18,7 @@ class MovementClass:
         self.backSub = cv2.createBackgroundSubtractorMOG2(20, 50, 0)
         params = self.setParams(cv2.SimpleBlobDetector_Params())
         self.detector = cv2.SimpleBlobDetector_create(params)
+        self.mouse = numpy.zeros([2])
         pass
 
     def setParams(self, param):
@@ -39,11 +42,12 @@ class MovementClass:
         view_blobs = cv2.drawKeypoints(difference, keypoints, empty, (0, 0, 255),
                                        cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
         cv2.imshow('bgDiff', view_blobs)
+        cv2.setMouseCallback('bgDiff', self.getMouse)
         return keypoints
 
     def getMouse(self, event, x, y, flags, param):
-
-        return mouse
+        self.mouse[0] = x
+        self.mouse[1] = y
 
     def getWidth(self):
         return self.camera.get(3)

@@ -6,10 +6,8 @@ p = pyaudio.PyAudio()
 
 
 """
-Keep 'Get sine wave at buffersize (0.03seconds == 30millis == 30fps),
-call this every buffer to keep sine continuety
-
-
+Keep 'Get sine wave at bufferSize (0.03seconds == 30millis == ~30fps (CameraRate)),
+call this every buffer to keep sine continuity
 """
 
 
@@ -29,13 +27,14 @@ class Audio:
 
         self.sineWave = Sine(self.bufferSize, self.sampleRate)
         self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32)
-        #self.buffer = self.sineWave.getBuffer(500)
         pass
 
     def playSine(self, frequency):
         self.buffer = self.sineWave.getBuffer(frequency)
+        self.buffer += self.sineWave.getBuffer(frequency * 2)
+        self.buffer += self.sineWave.getBuffer(frequency * 1.5)
+        self.buffer /= 3
         pass
-
 
     def callback(self, in_data, frame_count, time_info, status):
         buffer = self.buffer
