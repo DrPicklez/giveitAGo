@@ -5,11 +5,11 @@ import time
 
 class Sine:
 
-    def __init__(self, duration, fs):
+    def __init__(self, duration, sampleRate):
         self.duration = duration
-        self.fs = fs
+        self.sampleRate = sampleRate
 
     def getBuffer(self, frequency):
-        buffer = (np.sin(2 * np.pi * np.arange(self.fs * self.duration) * frequency / self.fs)).astype(np.float32)
+        buffer = (np.sin(2 * np.pi * np.arange(self.sampleRate * self.duration) * frequency / self.sampleRate)).astype(np.float32)
         return buffer
 

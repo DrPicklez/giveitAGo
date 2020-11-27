@@ -12,6 +12,11 @@ while 1:
         print("y:")
         print(point.pt[1])
 
+    if len(points) > 0:
+        audio.playSine(points[0].pt[0])
+
+
+
     if movement.getIsClosed() == 0:
         break
 
