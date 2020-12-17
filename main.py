@@ -7,6 +7,7 @@ movement = MovementClass()
 audio = Audio()
 
 
+
 while 1:
     points = movement.getMovement()
     audio.playSine(movement.mouse[0] + 300)

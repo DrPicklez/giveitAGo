@@ -6,39 +6,28 @@ import time
 class Sine:
 
     def __init__(self, duration, sampleRate):
-        self.duration = duration
         self.sampleRate = sampleRate
-        self.phase = 0
-        self.bufferSize = int(sampleRate * duration)
-        self.waveTable = [np.float] * self.bufferSize       # changing for np datatype
+        self.waveTable = [np.float] * int(sampleRate * duration)       # changing for np datatype
         self.lastPhase = np.pi * 2
+        self.setFrequency(0)
+        self.phaseInc = 0
+        self.phase = 0
 
-    def getBuffer(self, frequency):
-        phaseInc = ((2 * np.pi * np.arange(self.bufferSize) * frequency / self.sampleRate) + self.phase).astype(np.float32)
-        self.phase = phaseInc[len(phaseInc) - 1]
-        buffer = np.sin(phaseInc)
-        print(self.phase)
-        return buffer
+    def setFrequency(self, frequency):
+        self.phaseInc = np.float32((np.pi * 2.) * frequency * (1. / self.sampleRate))  # changing for np datatype
 
-    def dynBuffer(self, frequency):
-        #frequency = 320
-        phaseInc = np.float32((np.pi * 2.) * frequency * (1. / self.sampleRate))    # changing for np datatype
-        phase = 0
+    def dynBuffer(self):
 
         for i in range(len(self.waveTable)):
-            #phase += phaseInc
-            tPhase = phaseInc * i
-            if tPhase > (np.pi * 2.):
-                tPhase = (phase - (np.pi * 2))
+            self.phase += self.phaseInc
+            if self.phase > (np.pi * 2.):
+                self.phase = (self.phase - (np.pi * 2))
 
-            self.waveTable[i] = tPhase + self.lastPhase
+            self.waveTable[i] = self.phase + self.lastPhase
 
-
-        self.lastPhase = self.waveTable[len(self.waveTable) - 1]
-        #self.lastPhase = self.waveTable[0]
         self.waveTable = np.sin(self.waveTable)
         _waveTable = np.array(self.waveTable).astype(np.float32).tobytes()
-        print(self.lastPhase, frequency)
+        print(self.lastPhase)
 
         return _waveTable
 
