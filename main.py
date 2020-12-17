@@ -1,12 +1,15 @@
 from Movement import MovementClass
 from Audio import Audio
+import time
 
-audio = Audio()
+
 movement = MovementClass()
+audio = Audio()
+
 
 while 1:
     points = movement.getMovement()
-    audio.playSine(movement.mouse[0])
+    audio.playSine(movement.mouse[0] + 300)
     for point in points:
         pass
         # print("x:")

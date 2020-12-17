@@ -14,31 +14,27 @@ call this every buffer to keep sine continuity
 class Audio:
 
     def __init__(self):
-        self.volume = 0.5     # range [0.0, 1.0]
+        self.volume = 0.25     # range [0.0, 1.0]
         self.sampleRate = 44100       # sampling rate, Hz, must be integer
-        self.bufferSize = 0.01   # in seconds, may be float       0.03 == 30ms delay
+        self.bufferSize = 0.005   # in seconds, may be float       0.03 == 30ms delay
         self.bufferSizeinSamps = int(self.sampleRate * self.bufferSize)
+        self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32).tobytes()
         self.stream = p.open(format=pyaudio.paFloat32,
                              channels=1,
                              rate=self.sampleRate,
                              frames_per_buffer = self.bufferSizeinSamps,
                              stream_callback = self.callback,
                              output=True)
-
         self.sineWave = Sine(self.bufferSize, self.sampleRate)
-        self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32)
         pass
 
     def playSine(self, frequency):
-        self.buffer = self.sineWave.getBuffer(frequency)
-        self.buffer += self.sineWave.getBuffer(frequency * 2)
-        self.buffer += self.sineWave.getBuffer(frequency * 1.5)
-        self.buffer /= 3
+        self.buffer = self.sineWave.dynBuffer(frequency)
         pass
 
     def callback(self, in_data, frame_count, time_info, status):
-        buffer = self.buffer
-        return (buffer, pyaudio.paContinue)
+        # Sends buffer to sound card
+        return (self.buffer, pyaudio.paContinue)
 
         # generate samples, note conversion to float32 array
 
