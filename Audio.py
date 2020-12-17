@@ -16,16 +16,16 @@ class Audio:
     def __init__(self):
         self.volume = 0.25     # range [0.0, 1.0]
         self.sampleRate = 44100       # sampling rate, Hz, must be integer
-        self.bufferSize = 0.001   # in seconds, may be float       0.03 == 30ms delay
+        self.bufferSize = 0.002   # in seconds, may be float       0.03 == 30ms delay
         self.bufferSizeinSamps = int(self.sampleRate * self.bufferSize)
         self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32).tobytes()
+        self.sineWave = Sine(self.bufferSize, self.sampleRate)
         self.stream = p.open(format=pyaudio.paFloat32,
                              channels=1,
                              rate=self.sampleRate,
                              frames_per_buffer = self.bufferSizeinSamps,
                              stream_callback = self.callback,
                              output=True)
-        self.sineWave = Sine(self.bufferSize, self.sampleRate)
         pass
 
     def playSine(self, frequency):
