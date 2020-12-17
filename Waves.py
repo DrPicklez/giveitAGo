@@ -18,7 +18,6 @@ class Sine:
         self.phaseInc = np.float32((self.fullWave * frequency) / self.sampleRate)  # changing for np datatype
 
     def dynBuffer(self):
-
         for i in range(len(self.waveTable)):
             self.phase += self.phaseInc
             if self.phase > self.fullWave:
@@ -29,7 +28,7 @@ class Sine:
         self.waveTable = np.sin(self.waveTable)
         self.waveTable /= self.fullWave / 4.
         _waveTable = np.array(self.waveTable).astype(np.float32).tobytes()
-        print(self.lastPhase)
+        print(self.phase)
 
         return _waveTable
 
