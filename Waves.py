@@ -9,19 +9,20 @@ class Sine:
         self.sampleRate = sampleRate
         self.waveTable = [np.float] * int(sampleRate * duration)       # changing for np datatype
         self.lastPhase = np.pi * 2
-        self.setFrequency(0)
         self.phaseInc = 0
         self.phase = 0
+        self.fullWave = np.pi * 2
+        self.setFrequency(0)
 
     def setFrequency(self, frequency):
-        self.phaseInc = np.float32((np.pi * 2.) * frequency * (1. / self.sampleRate))  # changing for np datatype
+        self.phaseInc = np.float32((self.fullWave * frequency) / self.sampleRate)  # changing for np datatype
 
     def dynBuffer(self):
 
         for i in range(len(self.waveTable)):
             self.phase += self.phaseInc
-            if self.phase > (np.pi * 2.):
-                self.phase = (self.phase - (np.pi * 2))
+            if self.phase > self.fullWave:
+                self.phase = self.phase - self.fullWave
 
             self.waveTable[i] = self.phase + self.lastPhase
 
