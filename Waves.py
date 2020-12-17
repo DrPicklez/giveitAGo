@@ -21,19 +21,20 @@ class Sine:
         return buffer
 
     def dynBuffer(self, frequency):
-        # frequency = 200
+        #frequency = 320
         phaseInc = np.float32((np.pi * 2.) * frequency * (1. / self.sampleRate))    # changing for np datatype
-        phase = 0.0
+        phase = 0
 
         for i in range(len(self.waveTable)):
-            phase += phaseInc
+            #phase += phaseInc
+            tPhase = phaseInc * i
+            if tPhase > (np.pi * 2.):
+                tPhase = (phase - (np.pi * 2))
 
-            if phase > (np.pi * 2.):
-                phase = 0.0
+            self.waveTable[i] = tPhase + self.lastPhase
 
-            self.waveTable[i] = phase + self.lastPhase
 
-        #self.lastPhase = self.waveTable[len(self.waveTable) - 1]
+        self.lastPhase = self.waveTable[len(self.waveTable) - 1]
         #self.lastPhase = self.waveTable[0]
         self.waveTable = np.sin(self.waveTable)
         _waveTable = np.array(self.waveTable).astype(np.float32).tobytes()
