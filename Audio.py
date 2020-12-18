@@ -34,7 +34,7 @@ class Audio:
 
     def callback(self, in_data, frame_count, time_info, status):
         # Sends buffer to sound card
-        self.buffer = self.sineWave.dynBuffer()
+        self.buffer = self.sineWave.dynBuffer()             #make nice datatype so math is easy like master
 
         return (self.buffer, pyaudio.paContinue)
 
