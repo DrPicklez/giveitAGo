@@ -8,6 +8,7 @@ class Sine:
     def __init__(self, duration, sampleRate):
         self.sampleRate = sampleRate
         self.waveTable = [np.float] * int(sampleRate * duration)       # changing for np datatype
+        # make samplesize master
         self.lastPhase = np.pi * 2
         self.phaseInc = 0
         self.phase = 0
