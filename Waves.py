@@ -27,7 +27,7 @@ class Sine:
             self.waveTable[i] = self.phase
 
         self.waveTable = np.sin(self.waveTable)
-        self.waveTable /= self.fullWave / 4.
+        # self.waveTable /= self.fullWave / 4.
         _waveTable = np.array(self.waveTable).astype(np.float32).tobytes()
         print(self.phase)
 

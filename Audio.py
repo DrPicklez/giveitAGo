@@ -18,7 +18,7 @@ class Audio:
         self.sampleRate = 44100       # sampling rate, Hz, must be integer
         self.bufferSize = 0.002   # in seconds, may be float       0.03 == 30ms delay
         self.bufferSizeinSamps = int(self.sampleRate * self.bufferSize)
-        self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32).tobytes()
+        #self.buffer = np.empty([self.bufferSizeinSamps]).astype(np.float32).tobytes()
         self.sineWave = Sine(self.bufferSize, self.sampleRate)
         self.stream = p.open(format=pyaudio.paFloat32,
                              channels=1,
@@ -26,6 +26,7 @@ class Audio:
                              frames_per_buffer = self.bufferSizeinSamps,
                              stream_callback = self.callback,
                              output=True)
+        self.buffer = self.sineWave.dynBuffer()
         pass
 
     def playSine(self, frequency):
@@ -35,11 +36,13 @@ class Audio:
     def callback(self, in_data, frame_count, time_info, status):
         # Sends buffer to sound card
         self.buffer = self.sineWave.dynBuffer()             #make nice datatype so math is easy like master
+        #self.buffer = np.multiply(self.buffer * volume)
 
         return (self.buffer, pyaudio.paContinue)
 
         # generate samples, note conversion to float32 array
 
+    @staticmethod
     def stopStream(self):
         stream.stop_stream()
         stream.close()
